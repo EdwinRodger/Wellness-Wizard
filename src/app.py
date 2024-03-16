@@ -66,6 +66,12 @@ def signin():
     flask.flash('Wrong username or password!', 'danger')
     return flask.redirect(flask.url_for('signin'))
 
+@app.route('/sign_out')
+def sign_out():
+    flask_login.logout_user()
+    flask.flash('You have been logged out!', 'success')
+    return flask.redirect(flask.url_for('home'))
+
 
 @app.route('/dashboard')
 @flask_login.login_required
