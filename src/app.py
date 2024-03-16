@@ -73,8 +73,50 @@ def sign_out():
     return flask.redirect(flask.url_for('home'))
 
 
-@app.route('/dashboard')
+@app.route('/test/<subject>/<int:qno>', methods=['GET', 'POST'])
 @flask_login.login_required
+def test(subject, qno):
+    if flask.request.method == 'POST':
+        if 'score' not in flask.session:
+            flask.session['score'] = 0  # Initialize score variable in session
+        option = flask.request.form.getlist("options")
+        if flask.request.method == 'POST':
+            option = flask.request.form.getlist("options")
+            if "option1" in option:
+                flask.session['score'] += 1
+            elif "option2" in option:
+                flask.session['score'] += 2
+            elif "option3" in option:
+                flask.session['score'] += 3
+            elif "option4" in option:
+                flask.session['score'] += 4
+            elif "option5" in option:
+                flask.session['score'] += 5
+            else:
+                pass
+            return flask.redirect(flask.url_for('test', subject=subject, qno=qno+1))
+    
+    if qno == 0:
+        flask.session['score'] = 0  # Reset score to 0 when qno is 0
+
+    if subject == "Depression":
+        with open("src\\questions\\Depression.csv", "r") as f:
+            QA = f.readlines()
+    if subject == "Anxiety":
+        with open("src\\questions\\Anxiety.csv", "r") as f:
+            QA = f.readlines()
+    if subject == "Addiction":
+        with open("src\\questions\\Addiction.csv", "r") as f:
+            QA = f.readlines()
+    try:
+        que = QA[qno].split(",")[0]
+        ans = QA[qno].split(",")[1:]
+    except:
+        flask.flash(f"Your score is {flask.session['score']}", 'success')
+        return flask.redirect(flask.url_for('dashboard'))
+    return flask.render_template('test.html', subject=subject, que=que, ans=ans)
+
+@app.route('/dashboard')
 def dashboard():
     return flask.render_template('dashboard.html')
 
