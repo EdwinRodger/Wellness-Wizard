@@ -34,10 +34,10 @@ def request_loader(request):
     user.id = email
     return user
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
     if flask.request.method == 'GET':
-        return flask.render_template('login.html')
+        return flask.render_template('signin.html')
 
     email = flask.request.form['email']
     if email in users and flask.request.form['password'] == users[email]['password']:
@@ -46,8 +46,8 @@ def login():
         flask_login.login_user(user)
         return flask.redirect(flask.url_for('dashboard'))
 
-    flask.flash('Wrong username or password!')
-    return flask.redirect(flask.url_for('login'))
+    flask.flash('Wrong username or password!', 'danger')
+    return flask.redirect(flask.url_for('signin'))
 
 
 @app.route('/dashboard')
