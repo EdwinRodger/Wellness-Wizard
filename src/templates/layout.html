@@ -11,7 +11,21 @@
 
 <body>
     <header>
-        <nav>Navbar - logo, home, about, <a href="{{ url_for('login') }}">Login</a>, signup</nav>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Wellness Wizard</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                  <a class="nav-link active" aria-current="page" href="#">Home</a>
+                  <a class="nav-link" href="#">About</a>
+                  <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                </div>
+              </div>
+            </div>
+          </nav>
         <flashMessage>
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
