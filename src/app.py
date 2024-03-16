@@ -43,6 +43,10 @@ def signup():
     if email in users:
         flask.flash('Email already exists!', 'danger')
         return flask.redirect(flask.url_for('signup'))
+    
+    if flask.request.form['password'] != flask.request.form['confirm_password']:
+        flask.flash('Passwords do not match!', 'danger')
+        return flask.redirect(flask.url_for('signup'))
 
     users[email] = {'password': flask.request.form['password']}
     return flask.redirect(flask.url_for('signin'))
