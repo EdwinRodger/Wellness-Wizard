@@ -79,7 +79,6 @@ def dashboard():
     return flask.render_template('dashboard.html')
 
 @app.route('/aboutus')
-@flask_login.login_required
 def aboutus():
     return flask.render_template('AboutUs.html')
 
