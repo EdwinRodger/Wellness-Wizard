@@ -34,6 +34,19 @@ def request_loader(request):
     user.id = email
     return user
 
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if flask.request.method == 'GET':
+        return flask.render_template('signup.html')
+
+    email = flask.request.form['email']
+    if email in users:
+        flask.flash('Email already exists!', 'danger')
+        return flask.redirect(flask.url_for('signup'))
+
+    users[email] = {'password': flask.request.form['password']}
+    return flask.redirect(flask.url_for('signin'))
+
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
     if flask.request.method == 'GET':
