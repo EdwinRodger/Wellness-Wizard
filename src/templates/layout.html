@@ -9,7 +9,7 @@
 
 <body>
     <header>
-        <nav>Navbar - logo, home, about, login, signup</nav>
+        <nav>Navbar - logo, home, about, <a href="{{ url_for('login') }}">Login</a>, signup</nav>
     </header>
     <main>
         {% block content %}
