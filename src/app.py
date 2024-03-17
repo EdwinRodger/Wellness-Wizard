@@ -133,7 +133,7 @@ def result(subject, points):
         elif result == "Dead":
             suggestion = "chronic or Treatment-Resistant Anxiety ! Seek Professional Help: If you're experiencing severe Anxiety, it's crucial to reach out to a qualified mental health professional, such as a psychiatrist, psychologist, or counselor, for an accurate diagnosis and treatment plan."
     
-    if subject.lower() == "internet addiction":
+    if subject.lower() == "addiction":
         if result == "Great":
             suggestion = "You are a happy person!"
         elif result == "Good":
@@ -193,6 +193,7 @@ def test(subject, qno):
     if subject == "Addiction":
         with open("src\\questions\\Addiction.csv", "r") as f:
             QA = f.readlines()
+        subject = "Internet Addiction"
     try:
         que = QA[qno].split(",")[0]
         ans = QA[qno].split(",")[1:]
