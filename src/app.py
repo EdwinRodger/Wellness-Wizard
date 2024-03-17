@@ -34,6 +34,27 @@ def request_loader(request):
     user.id = email
     return user
 
+def score(score, subject):
+    if subject != "Depression":
+        score *= 2
+    if(score >= 86):
+        return "Great"
+
+    elif(score >= 71 and score <= 85):
+        return "Good"
+
+    elif(score >= 50 and score <= 70):
+        return "Okay"
+
+    elif(score >= 35 and score <= 49):
+        return "Bad"
+
+    elif(score >= 20 and score <= 34):
+        return "Worst"
+
+    else:
+        return "Dead"
+    
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if flask.request.method == 'GET':
@@ -66,6 +87,10 @@ def signin():
     flask.flash('Wrong username or password!', 'danger')
     return flask.redirect(flask.url_for('signin'))
 
+@app.route('/result/<subject>/<int:points>')
+def result(subject, points):
+    return flask.render_template('result.html', subject=subject, result=points)
+
 @app.route('/sign_out')
 def sign_out():
     flask_login.logout_user()
@@ -78,7 +103,7 @@ def sign_out():
 def test(subject, qno):
     if flask.request.method == 'POST':
         if 'score' not in flask.session:
-            flask.session['score'] = 0  # Initialize score variable in session
+            flask.session['score'] = 0 
         option = flask.request.form.getlist("options")
         if flask.request.method == 'POST':
             option = flask.request.form.getlist("options")
@@ -97,7 +122,7 @@ def test(subject, qno):
             return flask.redirect(flask.url_for('test', subject=subject, qno=qno+1))
     
     if qno == 0:
-        flask.session['score'] = 0  # Reset score to 0 when qno is 0
+        flask.session['score'] = 0
 
     if subject == "Depression":
         with open("src\\questions\\Depression.csv", "r") as f:
@@ -112,8 +137,7 @@ def test(subject, qno):
         que = QA[qno].split(",")[0]
         ans = QA[qno].split(",")[1:]
     except:
-        flask.flash(f"Your score is {flask.session['score']}", 'success')
-        return flask.redirect(flask.url_for('dashboard'))
+        return flask.redirect(flask.url_for('result', points=flask.session['score'], subject=subject))
     return flask.render_template('test.html', subject=subject, que=que, ans=ans)
 
 @app.route('/dashboard')
