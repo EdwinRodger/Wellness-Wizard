@@ -1,9 +1,9 @@
 import flask
 import flask_login
 import flask_sqlalchemy
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from werkzeug.security import check_password_hash, generate_password_hash
+from wtforms import PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo
 
 app = flask.Flask(__name__)
