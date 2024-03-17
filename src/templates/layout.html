@@ -87,23 +87,21 @@
       {% endwith %}
     </flashMessage>
   </header>
+  <hr>
   <main class="container">
     {% block content %}
     {% endblock %}
   </main>
   <footer>
-    <div class="container">
-      <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5 border-top justify-content-center">
+    <div class="container mt-5">
+      <hr>
+      <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-3 my-3 justify-content-center">
         <div class="col mb-3 text-center">
           <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
             <a class="navbar-brand" href="{{ url_for('home') }}">
               <img src="{{ url_for('static', filename='favicon/android-chrome-192x192.png') }}" alt="Logo" height="150" class="d-inline-block"></a>
           </a>
           <p class="text-body-secondary">© 2024</p>
-        </div>
-
-        <div class="col mb-3">
-
         </div>
 
         <div class="col mb-3">
@@ -130,6 +128,12 @@
             <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Email : wellness@123</a></li>
             <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Contact :6392373721</a></li>
             <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Address : SDSF-DAVV</a></li>
+          </ul>
+          <h5>Team</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2">Name : TeamOutOfMemory</a></li>
+            <li class="nav-item mb-2">Lead : Vaidik Lotan</li>
+            <li class="nav-item mb-2">Members : Trishansh Sahane, Vishal Rothod, Shivam Dubey</li>
           </ul>
         </div>
       </footer>
