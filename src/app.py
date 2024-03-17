@@ -209,6 +209,10 @@ def dashboard():
 def aboutus():
     return flask.render_template('AboutUs.html')
 
+@app.route('/faq')
+def faq():
+    return flask.render_template('FAQ.html')
+
 @app.route('/')
 @app.route('/home')
 def home():
