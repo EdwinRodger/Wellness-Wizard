@@ -146,8 +146,6 @@ def result(subject, points):
             suggestion = "Severe Addiction ! Inpatient treatment: Consider inpatient or residential treatment programs for intensive therapy and monitoring , Detoxification if necessary: Address any physical dependence or withdrawal symptoms that may arise from excessive internet use , Pharmacotherapy: Consider medication to manage co-occurring mental health conditions such as depression or anxiety."
         elif result == "Dead":
             suggestion = "Chronic Addiction ! Long-term therapy: Engage in ongoing therapy to address deep-seated issues and maintain progress , Relapse prevention: Develop a comprehensive relapse prevention plan that includes identifying triggers, coping strategies, and support networks."
-
-    print(suggestion)
     return flask.render_template('result.html', subject=subject, points=points, suggestion=suggestion, result=result)
 
 
