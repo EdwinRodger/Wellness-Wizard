@@ -1,38 +1,51 @@
 import flask
 import flask_login
+import flask_sqlalchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired, Email, EqualTo
 
 app = flask.Flask(__name__)
 app.secret_key = 'super secret string'
 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+db = flask_sqlalchemy.SQLAlchemy(app)
+
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
-# Our mock database.
-users = {'root': {'password': 'root'}}
-
-class User(flask_login.UserMixin):
-    pass
-
-
 @login_manager.user_loader
-def user_loader(email):
-    if email not in users:
-        return
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
-    user = User()
-    user.id = email
-    return user
+class User(db.Model, flask_login.UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
 
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
 
-@login_manager.request_loader
-def request_loader(request):
-    email = request.form.get('email')
-    if email not in users:
-        return
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
-    user = User()
-    user.id = email
-    return user
+    def __repr__(self):
+        return f'{self.email}'
+
+with app.app_context():
+    db.create_all()
+
+class LoginForm(FlaskForm):
+    email = StringField('email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Login')
+
+class RegisterForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired(), EqualTo('confirm_password', message='Passwords must match')])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired()])
+    submit = SubmitField('Register')
 
 def score(score, subject):
     if subject != "Depression":
@@ -57,35 +70,36 @@ def score(score, subject):
     
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    if flask.request.method == 'GET':
-        return flask.render_template('signup.html')
-
-    email = flask.request.form['email']
-    if email in users:
-        flask.flash('Email already exists!', 'danger')
-        return flask.redirect(flask.url_for('signup'))
-    
-    if flask.request.form['password'] != flask.request.form['confirm_password']:
-        flask.flash('Passwords do not match!', 'danger')
-        return flask.redirect(flask.url_for('signup'))
-
-    users[email] = {'password': flask.request.form['password']}
-    return flask.redirect(flask.url_for('signin'))
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        try:
+            if user.email == form.email.data:
+                flask.flash('Email already exists', 'danger')
+                return flask.redirect(flask.url_for('signup'))
+        except:
+            pass
+        user = User(email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        return flask.redirect(flask.url_for('signin'))
+    return flask.render_template('signup.html', form=form)
 
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
-    if flask.request.method == 'GET':
-        return flask.render_template('signin.html')
-
-    email = flask.request.form['email']
-    if email in users and flask.request.form['password'] == users[email]['password']:
-        user = User()
-        user.id = email
-        flask_login.login_user(user)
-        return flask.redirect(flask.url_for('dashboard'))
-
-    flask.flash('Wrong username or password!', 'danger')
-    return flask.redirect(flask.url_for('signin'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and user.check_password(form.password.data):
+            flask_login.login_user(user, force=True)
+            flask.flash('You have been logged in!', 'success')
+            return flask.redirect(flask.url_for('dashboard'))
+        else:
+            # Handle invalid credentials
+            flask.flash('Invalid email or password', 'danger')
+            return flask.redirect(flask.url_for('signin'))
+    return flask.render_template('signin.html', form=form)
 
 @app.route('/result/<subject>/<int:points>')
 def result(subject, points):
@@ -119,7 +133,7 @@ def result(subject, points):
         elif result == "Dead":
             suggestion = "chronic or Treatment-Resistant Anxiety ! Seek Professional Help: If you're experiencing severe Anxiety, it's crucial to reach out to a qualified mental health professional, such as a psychiatrist, psychologist, or counselor, for an accurate diagnosis and treatment plan."
     
-    if subject.lower() == "internet addiction":
+    if subject.lower() == "addiction":
         if result == "Great":
             suggestion = "You are a happy person!"
         elif result == "Good":
@@ -179,6 +193,7 @@ def test(subject, qno):
     if subject == "Addiction":
         with open("src\\questions\\Addiction.csv", "r") as f:
             QA = f.readlines()
+        subject = "Internet Addiction"
     try:
         que = QA[qno].split(",")[0]
         ans = QA[qno].split(",")[1:]
