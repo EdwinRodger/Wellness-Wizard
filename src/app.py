@@ -38,22 +38,22 @@ def score(score, subject):
     if subject != "Depression":
         score *= 2
     if(score >= 86):
-        return "Great"
+        return "Great", score, subject
 
     elif(score >= 71 and score <= 85):
-        return "Good"
+        return "Good", score, subject
 
     elif(score >= 50 and score <= 70):
-        return "Okay"
+        return "Okay", score, subject
 
     elif(score >= 35 and score <= 49):
-        return "Bad"
+        return "Bad", score, subject
 
     elif(score >= 20 and score <= 34):
-        return "Worst"
+        return "Worst", score, subject
 
     else:
-        return "Dead"
+        return "Dead", score, subject
     
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -89,7 +89,24 @@ def signin():
 
 @app.route('/result/<subject>/<int:points>')
 def result(subject, points):
-    return flask.render_template('result.html', subject=subject, result=points)
+    suggestion = ""
+    result, points, subject = score(points, subject)
+    if subject.lower() == "depression":
+        if result == "Great":
+            suggestion = "You are a happy person!"
+        elif result == "Good":
+            suggestion = "Probably Depperesed. No need to worry."
+        elif result == "Okay":
+            suggestion = "lifestyle modification: Lifestyle changes such as regular exercise, healthy eating, adequate sleep, stress management, social support, limiting alcohol and substance use, setting realistic goals, engaging in enjoyable activities.These changes can improve mood, reduce symptoms, and contribute to overall well-being."
+        elif result == "Bad":
+            suggestion = "Psychological therapies like Cognitive Behavioral Therapy (CBT) and Interpersonal Therapy (IPT), whether provided by a mental health professional or through online platforms, can effectively treat depression by addressing negative thought patterns, improving interpersonal relationships, and teaching coping skills."
+        elif result == "Worst":
+            suggestion = "Medical treatments for depression include antidepressant medications, electroconvulsive therapy (ECT), transcranial magnetic stimulation (TMS), ketamine therapy, and lifestyle modifications. "
+        elif result == "Dead":
+            suggestion = "Seek Professional Help: If you're experiencing severe depression, it's crucial to reach out to a qualified mental health professional, such as a psychiatrist, psychologist, or counselor, for an accurate diagnosis and treatment plan."
+
+    print(suggestion)
+    return flask.render_template('result.html', subject=subject, points=points, suggestion=suggestion, result=result)
 
 @app.route('/sign_out')
 def sign_out():
