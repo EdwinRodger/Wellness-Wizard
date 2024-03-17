@@ -5,8 +5,38 @@
     <h1>Dashboard</h1>
 </div>
 <div>
-    <p>
-        Logged in as: {{ current_user.email }}
-    </p>
+    <div class="d-flex">
+        <p class="px-2 bg-warning rounded-1">
+            Logged in as: {{ current_user.email }}
+        </p>
+    </div>
+    <section>
+        <div class="d-flex">
+            <a href="{{ url_for('test', subject='Anxiety', qno=0) }}"
+                class="p-3 border border-black border-5 col-md-4 justify-content-center text-decoration-none text-reset">
+                <div>
+                    <img src="{{ url_for('static', filename='test-icons/anxiety.png') }}"
+                        alt="Anxiety" height="120" class="row mx-auto">
+                    <b class="row justify-content-center fs-3 mt-3">Anxiety</b>
+                </div>
+            </a>
+            <a href="{{ url_for('test', subject='Addiction', qno=0) }}"
+                class="p-3 border border-black border-5 col-md-4 justify-content-center text-decoration-none text-reset ms-3">
+                <div>
+                    <img src="{{ url_for('static', filename='test-icons/internet-addiction.png') }}"
+                        alt="Internet Addiction" height="120" class="row mx-auto">
+                    <b class="row justify-content-center fs-3 mt-3">Internet Addiction</b>
+                </div>
+            </a>
+            <a href="{{ url_for('test', subject='Depression', qno=0) }}"
+                class="p-3 border border-black border-5 col-md-4 justify-content-center text-decoration-none text-reset ms-3">
+                <div>
+                    <img src="{{ url_for('static', filename='test-icons/depression.png') }}"
+                        alt="Depression" height="120" class="row mx-auto">
+                    <b class="row justify-content-center fs-3 mt-3">Depression</b>
+                </div>
+            </a>
+        </div>
+    </section>
 </div>
 {% endblock %}
