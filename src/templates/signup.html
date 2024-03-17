@@ -6,22 +6,29 @@
     <div class="card" style="min-height: 30rem; min-width: 30rem; background-color: #edda92;">
         <div class="card-body vertical-center">
             <h1 class="card-title text-center">Sign Up</h1>
-            <form action='signup' method='POST'>
-                <div class="mb-3 form-floating">
-                    <input type="text" class="form-control" name='email' id="floatingInputValue" placeholder="">
-                    <label for="floatingInputValue">Email Address</label>
-                    <div id="emailHelp" class="form-text ms-1 card-text">We'll never share your email with anyone else.
-                    </div>
+            <form action="signup" method="post">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.email.label }} {{ form.email(size=20) }}
+                    {% for error in form.email.errors %}
+                    <span class="error">{{ error }}</span>
+                    {% endfor %}
                 </div>
-                <div class="mb-3 form-floating">
-                    <input type="password" class="form-control" name='password' id="floatingInputPassword" placeholder="">
-                    <label for="floatingInputPassword">Password</label>
+                <div class="form-group">
+                    {{ form.password.label }} {{ form.password(size=20) }}
+                    {% for error in form.password.errors %}
+                    <span class="error">{{ error }}</span>
+                    {% endfor %}
                 </div>
-                <div class="mb-3 form-floating">
-                    <input type="password" class="form-control" name='confirm_password' id="floatingInputConfirmPassword" placeholder="">
-                    <label for="floatingInputConfirmPassword">Confirm Password</label>
+                <div class="form-group">
+                    {{ form.confirm_password.label }} {{ form.confirm_password(size=20) }}
+                    {% for error in form.confirm_password.errors %}
+                    <span class="error">{{ error }}</span>
+                    {% endfor %}
                 </div>
-                <input type='submit' name='submit' class="btn btn-primary">
+                <div class="form-group">
+                    {{ form.submit }}
+                </div>
             </form>
         </div>
     </div>
