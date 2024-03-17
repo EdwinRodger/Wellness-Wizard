@@ -109,7 +109,7 @@ def result(subject, points):
         if result == "Great":
             suggestion = "You are a happy person!"
         elif result == "Good":
-            suggestion = "Probably Depperesed. No need to worry."
+            suggestion = "Probably Depressed ! No need to worry."
         elif result == "Okay":
             suggestion = "lifestyle modification: Lifestyle changes such as regular exercise, healthy eating, adequate sleep, stress management, social support, limiting alcohol and substance use, setting realistic goals, engaging in enjoyable activities.These changes can improve mood, reduce symptoms, and contribute to overall well-being."
         elif result == "Bad":
@@ -119,8 +119,37 @@ def result(subject, points):
         elif result == "Dead":
             suggestion = "Seek Professional Help: If you're experiencing severe depression, it's crucial to reach out to a qualified mental health professional, such as a psychiatrist, psychologist, or counselor, for an accurate diagnosis and treatment plan."
 
+    if subject.lower() == "anxiety":
+        if result == "Great":
+            suggestion = "You are a happy person!"
+        elif result == "Good":
+            suggestion = "Mild Anxiety ! No need to worry."
+        elif result == "Okay":
+            suggestion = "Moderate Anxiety ! Cognitive Behavioral Therapy (CBT): CBT helps individuals recognize and challenge irrational thoughts and beliefs contributing to anxiety.It teaches coping skills such as relaxation techniques, problem-solving, and exposure therapy."
+        elif result == "Bad":
+            suggestion = "Severe Anxiety ! Cognitive Behavioral Therapy (CBT) with Exposure and Response Prevention (ERP) and medication"
+        elif result == "Worst":
+            suggestion = "Panic Attacks or Panic Disorder ! Exposure Therapy and Gradual exposure to panic-inducing situations or sensations can help individuals become less sensitive to triggers over time.and Medication"
+        elif result == "Dead":
+            suggestion = "chronic or Treatment-Resistant Anxiety ! Seek Professional Help: If you're experiencing severe Anxiety, it's crucial to reach out to a qualified mental health professional, such as a psychiatrist, psychologist, or counselor, for an accurate diagnosis and treatment plan."
+    
+    if subject.lower() == "internet addiction":
+        if result == "Great":
+            suggestion = "You are a happy person!"
+        elif result == "Good":
+            suggestion = "Mild Addiction ! No need to worry. Psychoeducation: Educate the individual about internet addiction, its symptoms, and potential consequences , Self-monitoring: Encourage the individual to track their internet usage and identify triggers."
+        elif result == "Okay":
+            suggestion = "Moderate Addiction ! Individual therapy: Conduct one-on-one therapy sessions to address underlying psychological issues contributing to addiction , Stress management techniques: Teach relaxation techniques such as mindfulness meditation or deep breathing exercises to manage stress without relying on the internet."
+        elif result == "Bad":
+            suggestion = "Moderate to Severe Addiction ! Individual therapy addresses underlying psychological issues, Stress management techniques like meditation help manage stress.Inpatient treatment offers intensive therapy and monitoring may also help."
+        elif result == "Worst":
+            suggestion = "Severe Addiction ! Inpatient treatment: Consider inpatient or residential treatment programs for intensive therapy and monitoring , Detoxification if necessary: Address any physical dependence or withdrawal symptoms that may arise from excessive internet use , Pharmacotherapy: Consider medication to manage co-occurring mental health conditions such as depression or anxiety."
+        elif result == "Dead":
+            suggestion = "Chronic Addiction ! Long-term therapy: Engage in ongoing therapy to address deep-seated issues and maintain progress , Relapse prevention: Develop a comprehensive relapse prevention plan that includes identifying triggers, coping strategies, and support networks."
+
     print(suggestion)
     return flask.render_template('result.html', subject=subject, points=points, suggestion=suggestion, result=result)
+
 
 @app.route('/sign_out')
 def sign_out():
